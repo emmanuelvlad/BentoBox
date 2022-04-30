@@ -131,6 +131,16 @@ public class PlayerEntityPortalEvent {
     }
 
     /**
+     * Set the Block radius to create the portal.
+     * @param creationRadius the radius in which to create the portal from the location
+     */
+    public void setCreationRadius(int creationRadius) {
+        if (epe == null) {
+            ppe.setCreationRadius(creationRadius);
+        }
+    }
+
+    /**
      * Sets the location that this player will move to
      * @param to New Location this player or entity will move to
      */

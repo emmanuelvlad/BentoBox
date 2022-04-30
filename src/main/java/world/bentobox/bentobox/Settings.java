@@ -253,6 +253,11 @@ public class Settings implements ConfigObject {
     @ConfigEntry(path = "island.portal-search-radius", since = "1.16.2")
     private int minPortalSearchRadius = 64;
 
+    @ConfigComment("Cannot explain what it is doing.")
+    @ConfigComment("Vanilla default is ?.")
+    @ConfigEntry(path = "island.portal-creation-radius", since = "1.21.0")
+    private int portalCreationRadius = 2;
+
     @ConfigComment("Number of blocks to paste per tick when pasting blueprints.")
     @ConfigComment("Smaller values will help reduce noticeable lag but will make pasting take slightly longer.")
     @ConfigComment("On the contrary, greater values will make pasting take less time, but this benefit is quickly severely impacted by the")
@@ -905,6 +910,20 @@ public class Settings implements ConfigObject {
      */
     public void setMinPortalSearchRadius(int minPortalSearchRadius) {
         this.minPortalSearchRadius = minPortalSearchRadius;
+    }
+
+    /**
+     * @return the portal creation radius
+     */
+    public int getPortalCreationRadius() {
+        return portalCreationRadius;
+    }
+
+    /**
+     * @param portalCreateRadius the radius for the portal creation
+     */
+    public void setPortalCreationRadius(int portalCreationRadius) {
+        this.portalCreationRadius = portalCreationRadius;
     }
 
     public int getSafeSpotSearchVerticalRange() {

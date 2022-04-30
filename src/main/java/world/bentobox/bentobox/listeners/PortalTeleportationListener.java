@@ -197,6 +197,7 @@ public class PortalTeleportationListener implements Listener {
 
         // Find the distance from edge of island's protection and set the search radius
         e.getIsland().ifPresent(i -> setSeachRadius(e, i));
+        e.getIsland().ifPresent(i -> setCreationRadius(e));
 
         // Check if there is an island there or not
         if (e.getEntity().getType().equals(EntityType.PLAYER)
@@ -368,6 +369,8 @@ public class PortalTeleportationListener implements Listener {
             e.setTo(e.getFrom().toVector().toLocation(overWorld));
             // Find distance from edge of island's protection
             plugin.getIslands().getIslandAt(e.getFrom()).ifPresent(i -> setSeachRadius(e, i));
+            plugin.getIslands().getIslandAt(e.getFrom()).ifPresent(i -> setCreationRadius(e));
+
             return;
         }
         // Custom portals
@@ -436,6 +439,10 @@ public class PortalTeleportationListener implements Listener {
         if (diff > 0 && diff < 128) {
             e.setSearchRadius(diff);
         }
+    }
+
+    void setCreationRadius(PlayerEntityPortalEvent e) {
+        e.setCreationRadius(plugin.getSettings().getPortalCreationRadius());
     }
 
 
