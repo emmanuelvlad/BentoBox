@@ -133,7 +133,10 @@ public class LocalesManager {
         }
 
         // Get the prefixes from the server's locale
-        prefixes.addAll(languages.get(Locale.forLanguageTag(plugin.getSettings().getDefaultLanguage())).getPrefixes());
+        BentoBoxLocale serverLocale = languages.get(Locale.forLanguageTag(plugin.getSettings().getDefaultLanguage()));
+        if (serverLocale != null) {
+            prefixes.addAll(serverLocale.getPrefixes());
+        }
 
         // Get the prefixes from the en-US locale
         prefixes.addAll(languages.get(Locale.forLanguageTag(EN_US_TAG)).getPrefixes());
