@@ -7,8 +7,8 @@ import org.bukkit.World;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.WallSign;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import world.bentobox.bentobox.BentoBox;
@@ -156,27 +156,33 @@ public class DefaultPasteUtil {
         World world = location.getWorld();
         assert world != null;
         Util.getChunkAtAsync(location).thenRun(() -> list.stream().filter(k -> k.getType() != null).forEach(k -> {
-            LivingEntity e = (LivingEntity) location.getWorld().spawnEntity(location, k.getType());
-            if (k.getCustomName() != null) {
-                String customName = k.getCustomName();
+            boolean isItemFrame = k.getType() == EntityType.ITEM_FRAME;
+            if (isItemFrame) {
+                Location newLoc = location.clone().add(-0.5,-0.5,-0.5).getBlock().getLocation().clone();
+                k.configureEntity(world.spawn(newLoc, ItemFrame.class));
+            } else {
+                LivingEntity e = (LivingEntity) location.getWorld().spawnEntity(location, k.getType());
+                if (k.getCustomName() != null) {
+                    String customName = k.getCustomName();
 
-                if (island != null) {
-                    // Parse any placeholders in the entity's name, if the owner's connected (he should)
-                    Optional<Player> owner = Optional.ofNullable(island.getOwner())
-                            .map(User::getInstance)
-                            .map(User::getPlayer);
-                    if (owner.isPresent()) {
-                        // Parse for the player's name first (in case placeholders might need it)
-                        customName = customName.replace(TextVariables.NAME, owner.get().getName());
-                        // Now parse the placeholders
-                        customName = plugin.getPlaceholdersManager().replacePlaceholders(owner.get(), customName);
+                    if (island != null) {
+                        // Parse any placeholders in the entity's name, if the owner's connected (he should)
+                        Optional<Player> owner = Optional.ofNullable(island.getOwner())
+                                .map(User::getInstance)
+                                .map(User::getPlayer);
+                        if (owner.isPresent()) {
+                            // Parse for the player's name first (in case placeholders might need it)
+                            customName = customName.replace(TextVariables.NAME, owner.get().getName());
+                            // Now parse the placeholders
+                            customName = plugin.getPlaceholdersManager().replacePlaceholders(owner.get(), customName);
+                        }
                     }
-                }
 
-                // Actually set the custom name
-                e.setCustomName(customName);
+                    // Actually set the custom name
+                    e.setCustomName(customName);
+                }
+                k.configureEntity(e);
             }
-            k.configureEntity(e);
         }));
     }
 

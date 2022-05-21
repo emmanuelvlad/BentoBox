@@ -202,7 +202,7 @@ public class BlueprintPaster {
             }
         }
         else if (pasteState.equals(PasteState.ENTITIES)) {
-            if (bits.it3().hasNext()) {
+            // if (bits.it3().hasNext()) {
                 Map<Location, List<BlueprintEntity>> entityMap = new HashMap<>();
                 // Paste entities
                 while (count < pasteSpeed) {
@@ -221,10 +221,10 @@ public class BlueprintPaster {
                 if (!entityMap.isEmpty()) {
                     currentTask = paster.pasteEntities(island, world, entityMap);
                 }
-            } else {
+            // } else {
                 pasteState = PasteState.DONE;
                 owner.ifPresent(user -> user.sendMessage("commands.island.create.pasting.done"));
-            }
+            // }
         }
         else if (pasteState.equals(PasteState.DONE)) {
             // All done. Cancel task

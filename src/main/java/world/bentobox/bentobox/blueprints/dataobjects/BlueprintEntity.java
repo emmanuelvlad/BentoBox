@@ -3,15 +3,9 @@ package world.bentobox.bentobox.blueprints.dataobjects;
 import java.util.Map;
 
 import org.bukkit.DyeColor;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Horse.Style;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
@@ -50,7 +44,10 @@ public class BlueprintEntity {
     private Integer experience;
     @Expose
     private Villager.Type villagerType;
-    
+    @Expose
+    private ItemStack itemFrameItem;
+    @Expose
+    private BlockFace itemFrameFacing;
 
     /**
      * @since 1.8.0
@@ -85,6 +82,10 @@ public class BlueprintEntity {
             horse.setStyle(style);
         }
 
+        if (e instanceof ItemFrame itemFrame) {
+            itemFrame.setItem(itemFrameItem);
+            itemFrame.setFacingDirection(itemFrameFacing, true);
+        }
     }
     
     /**
@@ -269,5 +270,21 @@ public class BlueprintEntity {
     public void setDomestication(Integer domestication) {
         this.domestication = domestication;
     }
-    
+
+    /**
+     * @param item to set
+     */
+    public void setItemFrameItem(ItemStack item) {
+        this.itemFrameItem = item;
+    }
+
+    /**
+     * @param facing to set
+     */
+    public void setItemFrameFacing(BlockFace facing) {
+        this.itemFrameFacing = facing;
+    }
+    public BlockFace getItemFrameFacing() {
+        return itemFrameFacing;
+    }
 }

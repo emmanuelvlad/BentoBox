@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,14 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
@@ -36,7 +28,6 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
@@ -132,12 +123,12 @@ public class BlueprintClipboard {
             }
             copying = true;
             vectorsToCopy.stream().skip(index).limit(speed).forEach(v -> {
-                List<LivingEntity> ents = world.getLivingEntities().stream()
+                List<Entity> ents = world.getEntities().stream()
                         .filter(Objects::nonNull)
                         .filter(e -> !(e instanceof Player))
-                        .filter(e -> new Vector(Math.rint(e.getLocation().getX()),
-                                Math.rint(e.getLocation().getY()),
-                                Math.rint(e.getLocation().getZ())).equals(v))
+                        .filter(e -> new Vector(Math.rint(e.getLocation().getX() - 0.5),
+                                Math.rint(e.getLocation().getY() - 0.5),
+                                Math.rint(e.getLocation().getZ() - 0.5)).equals(v))
                         .collect(Collectors.toList());
                 if (copyBlock(v.toLocation(world), copyAir, ents)) {
                     count++;
@@ -179,7 +170,7 @@ public class BlueprintClipboard {
         return r;
     }
 
-    private boolean copyBlock(Location l, boolean copyAir, Collection<LivingEntity> entities) {
+    private boolean copyBlock(Location l, boolean copyAir, Collection<Entity> entities) {
         Block block = l.getBlock();
         if (!copyAir && block.getType().equals(Material.AIR) && entities.isEmpty()) {
             return false;
@@ -276,9 +267,9 @@ public class BlueprintClipboard {
         return cs;
     }
 
-    private List<BlueprintEntity> setEntities(Collection<LivingEntity> entities) {
+    private List<BlueprintEntity> setEntities(Collection<Entity> entities) {
         List<BlueprintEntity> bpEnts = new ArrayList<>();
-        for (LivingEntity entity: entities) {
+        for (Entity entity: entities) {
             BlueprintEntity bpe = new BlueprintEntity();
             bpe.setType(entity.getType());
             bpe.setCustomName(entity.getCustomName());
@@ -313,6 +304,11 @@ public class BlueprintClipboard {
 
             if (entity instanceof Horse horse) {
                 bpe.setStyle(horse.getStyle());
+            }
+
+            if (entity instanceof ItemFrame itemFrame) {
+                bpe.setItemFrameItem(itemFrame.getItem());
+                bpe.setItemFrameFacing(itemFrame.getFacing());
             }
             bpEnts.add(bpe);
         }
