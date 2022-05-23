@@ -217,8 +217,8 @@ public class IslandDeletion implements DataObject {
         this.uniqueId = uniqueId;
     }
 
-    public boolean inBounds(int x, int z) {
-        return box.contains(new Vector(x, 0, z));
+    public boolean inBounds(int x, int y, int z) {
+        return box.contains(new Vector(x, y, z));
     }
 
     /**

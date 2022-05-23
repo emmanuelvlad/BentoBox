@@ -86,7 +86,7 @@ public abstract class SimpleWorldRegenerator implements WorldRegenerator {
         CompletableFuture<Chunk> chunkFuture = PaperLib.getChunkAtAsync(world, chunkX, chunkZ);
         CompletableFuture<Void> invFuture = chunkFuture.thenAccept(chunk ->
                 Arrays.stream(chunk.getTileEntities()).filter(InventoryHolder.class::isInstance)
-                        .filter(te -> di.inBounds(te.getLocation().getBlockX(), te.getLocation().getBlockZ()))
+                        .filter(te -> di.inBounds(te.getLocation().getBlockX(), te.getLocation().getBlockY(), te.getLocation().getBlockZ()))
                         .forEach(te -> ((InventoryHolder) te).getInventory().clear())
         );
         CompletableFuture<Void> entitiesFuture = chunkFuture.thenAccept(chunk -> {
@@ -109,7 +109,7 @@ public abstract class SimpleWorldRegenerator implements WorldRegenerator {
         });
         CompletableFuture<Void> postCopyFuture = copyFuture.thenAccept(chunk -> {
             // Remove all entities in chunk, including any dropped items as a result of clearing the blocks above
-            Arrays.stream(chunk.getEntities()).filter(e -> !(e instanceof Player) && di.inBounds(e.getLocation().getBlockX(), e.getLocation().getBlockZ())).forEach(Entity::remove);
+            Arrays.stream(chunk.getEntities()).filter(e -> !(e instanceof Player) && di.inBounds(e.getLocation().getBlockX(), e.getLocation().getBlockY(), e.getLocation().getBlockZ())).forEach(Entity::remove);
         });
         return CompletableFuture.allOf(invFuture, entitiesFuture, postCopyFuture);
     }
