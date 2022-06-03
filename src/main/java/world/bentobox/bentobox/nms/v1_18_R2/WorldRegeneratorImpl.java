@@ -24,7 +24,7 @@ public class WorldRegeneratorImpl extends SimpleWorldRegenerator {
         Chunk nmsChunk = nmsWorld.d(chunk.getX(), chunk.getZ());
         BlockPosition bp = new BlockPosition((chunk.getX() << 4) + x, y, (chunk.getZ() << 4) + z);
         // Setting the block to air before setting to another state prevents some console errors
-        nmsChunk.a(bp, AIR, applyPhysics);
+        nmsChunk.a(bp, ((CraftBlockData) Bukkit.createBlockData(craft.getMaterial())).getState(), applyPhysics);
         nmsChunk.a(bp, craft.getState(), applyPhysics);
     }
 
