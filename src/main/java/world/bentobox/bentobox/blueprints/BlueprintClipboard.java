@@ -126,9 +126,9 @@ public class BlueprintClipboard {
                 List<Entity> ents = world.getEntities().stream()
                         .filter(Objects::nonNull)
                         .filter(e -> !(e instanceof Player))
-                        .filter(e -> new Vector(Math.rint(e.getLocation().getX() - 0.5),
-                                Math.rint(e.getLocation().getY() - 0.5),
-                                Math.rint(e.getLocation().getZ() - 0.5)).equals(v))
+                        .filter(e -> new Vector(Math.floor(e.getLocation().getX()),
+                                Math.floor(e.getLocation().getY()),
+                                Math.floor(e.getLocation().getZ())).equals(v))
                         .collect(Collectors.toList());
                 if (copyBlock(v.toLocation(world), copyAir, ents)) {
                     count++;
