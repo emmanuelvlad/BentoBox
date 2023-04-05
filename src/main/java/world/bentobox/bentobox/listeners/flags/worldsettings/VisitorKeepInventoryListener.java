@@ -31,7 +31,7 @@ public class VisitorKeepInventoryListener extends FlagListener {
             return;
         }
 
-        Optional<Island> island = getIslands().getProtectedIslandAt(e.getEntity().getLocation());
+        Optional<Island> island = getIslands().getIslandAt(e.getEntity().getLocation());
         if (island.isPresent() && !island.get().getMemberSet().contains(e.getEntity().getUniqueId())) {
             e.setKeepInventory(true);
             e.setKeepLevel(true);
